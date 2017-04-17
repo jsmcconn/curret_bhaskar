@@ -71,7 +71,7 @@ for i in range(0, 10) :
         current = (msb1 * 65536 + msb * 256 + lsb) / 1000.0
 
         # Output data to screen
-	print '   { '
+        print '   { '
         #print "Channel no : %d " %(i + 1)
         print '      "ChannelNumber": %d,' %(i + 1)
         #print "Current Value : %.3f A" %current
@@ -99,7 +99,7 @@ for i in range(0, 2) :
         current = (msb1 * 65536 + msb * 256 + lsb) / 1000.0
 
         # Output data to screen
-	print '   { '
+        print '   { '
         #print "Channel no : %d " %(j + 1)
         print '      "ChannelNumber": %d,' %(j + 1)
         #print "Current Value : %.3f A" %current
