@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # Distributed with a free-will license.
 # Use it any way you want, profit or free, provided it fits in the licenses of its associated works.
 # PECMAC125A
@@ -6,6 +8,9 @@
 
 import smbus
 import time
+
+# Print CGI header
+print "Content-Type: text/plain\r\n"
 
 # Get I2C bus
 bus = smbus.SMBus(1)
@@ -29,10 +34,19 @@ typeOfSensor = data[0]
 maxCurrent = data[1]
 noOfChannel = data[2]
 
+print '{ '
+
 # Output data to screen
-print "Type of Sensor : %d" %typeOfSensor
-print "Maximum Current : %d A" %maxCurrent
-print "No. of Channels : %d" %noOfChannel
+#print "Type of Sensor : %d" %typeOfSensor
+print '"SensorType": %d, ' %typeOfSensor
+#print "Maximum Current : %d A" %maxCurrent
+print '"MaxCurrent": %d, ' %maxCurrent
+#print "No. of Channels : %d" %noOfChannel
+print '"ChannelCount": %d, ' %noOfChannel
+
+
+print '"Channels":'
+print '['
 
 # PECMAC125A address, 0x2A(42)
 # Command for reading current
@@ -57,8 +71,13 @@ for i in range(0, 10) :
         current = (msb1 * 65536 + msb * 256 + lsb) / 1000.0
 
         # Output data to screen
-        print "Channel no : %d " %(i + 1)
-        print "Current Value : %.3f A" %current
+	print '   { '
+        #print "Channel no : %d " %(i + 1)
+        print '      "ChannelNumber": %d,' %(i + 1)
+        #print "Current Value : %.3f A" %current
+        print '      "Current": %.3f,' %current
+        print '      "Power": %d' %(current * 120)
+        print '   },'
 
 command1 = [0x6A, 0x01, 0x0B, 0x0C, 0x00, 0x00, 0x14]
 bus.write_i2c_block_data(0x2A, 0x92, command1)
@@ -80,6 +99,15 @@ for i in range(0, 2) :
         current = (msb1 * 65536 + msb * 256 + lsb) / 1000.0
 
         # Output data to screen
-        print "Channel no : %d " %(j + 1)
-        print "Current Value : %.3f A" %current
+	print '   { '
+        #print "Channel no : %d " %(j + 1)
+        print '      "ChannelNumber": %d,' %(j + 1)
+        #print "Current Value : %.3f A" %current
+        print '      "Current": %.3f,' %current
+        print '      "Power": %d' %(current * 120)
+        print '   },' if j != 11 else '   }'
+
         j = j+1
+
+print ']'
+print '}'
